@@ -1,0 +1,18 @@
+.list-item {
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .list-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .list-item-image {
+    max-width: 100px;
+    margin: 0 auto;
+    display: block;
+  }
+/* #user-section > img{
+    width: 50px;
+    height: 50px;
+}   */
