@@ -4,8 +4,11 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+// const path = require('path');
+const { v2: cloudinary } = require('cloudinary');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
-const path = require('path');
+
 const Article = require('./models/Article');
 const User = require('./models/User');
 const Message = require('./models/Message');
@@ -33,6 +36,11 @@ db.on('disconnected', () => {
   console.log('MongoDB disconnected');
 });
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 
 app.use(session({
@@ -48,6 +56,7 @@ app.use(session({
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
+app.set('trust proxy', 1);
 
 
 
@@ -119,23 +128,32 @@ const allowedUsers = ['102288906508007241851', 'GOOGLE_ID_2','117333328488046231
 
 
 // Set up Multer for file upload
-const storage = multer.diskStorage({
-  destination: 'uploads/', // Ensure this folder exists
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+// const storage = multer.diskStorage({
+//   destination: 'uploads/', // Ensure this folder exists
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+//   },
+// });
+// const upload = multer({
+//   storage,
+//   fileFilter: (req, file, cb) => {
+//     const fileTypes = /jpeg|jpg|png|gif/;
+//     const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+//     if (extname) return cb(null, true);
+//     cb('Error: Images only!');
+//   },
+//   limits: { fileSize: 1 * 1024 * 1024 }, // Limit: 1 MB
+// });
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'blog_images',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
   },
-});
-const upload = multer({
-  storage,
-  fileFilter: (req, file, cb) => {
-    const fileTypes = /jpeg|jpg|png|gif/;
-    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-    if (extname) return cb(null, true);
-    cb('Error: Images only!');
-  },
-  limits: { fileSize: 1 * 1024 * 1024 }, // Limit: 1 MB
 });
 
+const upload = multer({ storage });
 
 
 // Routes
@@ -418,7 +436,7 @@ app.post('/edit-article/:id', upload.single('coverImage'), async (req, res) => {
   // Handle file upload for cover image if provided
   let coverImage;
   if (req.file) {
-      coverImage = req.file.filename; // Use multer to save the file
+    coverImage = req.file.path;    // Use multer to save the file
       console.log("Cover image file name:", coverImage);
   }
 
@@ -537,7 +555,8 @@ app.get('/uploadarticle', ensureAuthenticatedAndAuthorized, (req, res) => {
 app.post('/upload-article', ensureAuthenticatedAndAuthorized, upload.single('coverImage'), async (req, res) => {  //ensureAuthenticated,
   try {
     const { title, hashtags, category, content, author } = req.body;
-    const coverImage = req.file ? req.file.filename : '';
+    const coverImage = req.file ? req.file.path : '';
+
 
     // Create a new article instance
     const newArticle = new Article({
