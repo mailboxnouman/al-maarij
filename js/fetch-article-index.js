@@ -23,7 +23,7 @@
                         <div class="blog__item">
                             <div class="article-image blog__item__pic">
                                     <a href="view-article.html?id=${article._id}">
-                                     <img src="uploads/${article.coverImage}" data-article-id="${article._id}" alt="${article.title}">
+                                     <img src="${article.coverImage}" data-article-id="${article._id}" alt="${article.title}">
                                     </a>
                             </div>
                             
