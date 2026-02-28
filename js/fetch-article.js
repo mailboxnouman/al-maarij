@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="blog__item animate__animated animate__bounceInUp">
                                 <div class="article-image blog__item__pic">
                                      <a href="view-article.html?id=${article._id}">
-                                      <img src="uploads/${article.coverImage}" data-article-id="${article._id}" alt="${article.title}">
+                                      <img src="${article.coverImage}" data-article-id="${article._id}" alt="${article.title}">
                                       </a>
                                 </div>
                                 <div class="blog__item__text">
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const articleElement = `
                         <a href="view-article.html?id=${article._id}" class="blog__sidebar__recent__item" style="display: flex; align-items: center; margin-bottom: 15px;">
                             <div  class="blog__sidebar__recent__item__pic" style="flex: 0 0 80px; height: 80px; overflow: hidden; margin-right: 10px;">
-                                <img style="object-fit:cover; height:100%;" src="uploads/${article.coverImage}" alt="${article.title}" style="width: 100%; height: auto;" onerror="this.src='default.jpg';">
+                                <img style="object-fit:cover; height:100%;" src="${article.coverImage}" alt="${article.title}" style="width: 100%; height: auto;" onerror="this.src='default.jpg';">
                             </div>
                             <div class="blog__sidebar__recent__item__text">
                                 <h6 style="margin: 0; font-size: 14px;">${article.title}</h6>

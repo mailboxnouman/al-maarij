@@ -30,7 +30,7 @@ $(document).ready(function () {
                      <div class="col-lg-3 col-md-4 col-sm-6 mix ${article.category}">
                 <div class="featured__item">
                     <div class="featured__item__pic set-bg" 
-                         style="background-image: url('/uploads/${article.coverImage}');">
+                         style="background-image: url('${article.coverImage}');">
                         <ul class="featured__item__pic__hover">
                             <li><a href="#" class="favorite-btn" data-article-id="${article._id}" data-sequence="${article.favoriteSequence || ''}">
                                  <i class="fa fa-heart" style="color: ${article.isFavorite ? 'red' : 'black'};">

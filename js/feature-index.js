@@ -29,7 +29,7 @@ $(document).ready(function () {
                 $('#articles-container').append(`
                     <div class="col-lg-3 col-md-4 col-sm-6 mix ${article.category}">
                         <div class="featured__item animate__animated animate__zoomInDown">
-                            <div class="featured__item__pic set-bg" style="background-image: url('/uploads/${article.coverImage}');">
+                            <div class="featured__item__pic set-bg" style="background-image: url('${article.coverImage}');">
                                 <ul class="featured__item__pic__hover">
                                     <li><a href="/view-article.html?id=${article._id}">
                                         <i class="fa fa-book"></i>
